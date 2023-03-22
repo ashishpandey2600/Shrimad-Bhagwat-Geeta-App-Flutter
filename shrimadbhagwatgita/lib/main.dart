@@ -1,7 +1,8 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,35 +16,54 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Map mapfinal = {};
-  String stringfinal2 = "";
-  Future apiCall() async {
-    http.Response response =
-        await http.get(Uri.parse("https://bhagavadgitaapi.in/slok/:ch/:sl"));
-    if (response.statusCode == 200) {
-      mapfinal = json.decode(response.body);
+  // Map mapfinal = {};
+  // String stringfinal2 = "";
+  // Future apiCall() async {
+  //   http.Response response =
+  //       await http.get(Uri.parse("https://bhagavadgitaapi.in/slok/:ch/:sl"));
+  //   if (response.statusCode == 200) {
+  //     mapfinal = json.decode(response.body);
 
-    }
-  }
+  //   }
+  // }
+
+  // @override
+  // void initState() {
+  //   apiCall();
+  //   super.initState();
+  // }
+
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   @override
   void initState() {
-    apiCall();
+    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.deepOrange),
       home: Scaffold(
-        appBar: AppBar(title: Text("data"),),
-        body: PageView.builder(itemBuilder: (index, context) {
-        return PageView(
-          children: [
-            Text(mapfinal.toString()),
+        
+        appBar: AppBar(
+          title: Text("ShrimadBhahwatgitaJi"),
+          actions: <Widget>[
+            IconButton(
+                onPressed: () {
+                  _pdfViewerKey.currentState?.openBookmarkView();
+                },
+                icon: Icon(
+                  Icons.bookmark,
+                  color: Colors.white,
+                  semanticLabel: 'Bookmark',
+                ))
           ],
-        );
-      })),
+        ),
+        body: SfPdfViewer.asset("assets/bbg.pdf"),
+      ),
     );
   }
 }
